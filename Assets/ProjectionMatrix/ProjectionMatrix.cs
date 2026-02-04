@@ -24,21 +24,23 @@ public class ProjectionMatrix : MonoBehaviour
     public bool useHorizontal = false;
     public Vector2 aspectRatio = new Vector2(16, 10);
 
-    [Range(0,1f)]
+    [Range(0, 1f)]
     public float orthography = 0;
+    [Range(1, 100)]
     public float orthographicSize = 5;
 
     private Vector2 xCoords;
     private Vector2 yCoords;
     private Vector2 zCoords;
 
-    private Vector2 prevX = new Vector2(0, 0);
-    private Vector2 prevY = new Vector2(0, 0);
-    private Vector2 prevZ = new Vector2(0, 0);
+
+    public bool write = false;
+    public LineRenderer screen;
+    public LineRenderer rear;
+
 
 
     public GameObject panel;
-
     // Start is called once before the first execution of Update after the MonoBehaviour is create
 
     Matrix4x4 ProcessInput()
@@ -67,18 +69,73 @@ public class ProjectionMatrix : MonoBehaviour
                 xCoords = aspectRatio.x / aspectRatio.y * yCoords;
             }
         }
+        float orthographicMultiplier;
 
-        xCoords *= 1+orthographicSize * orthography;
-        yCoords *= 1+orthographicSize * orthography;
+        if (useHorizontal)
+        {
+            orthographicMultiplier = Mathf.Lerp((xCoords.y - xCoords.x) / 2, orthographicSize, Mathf.Pow(orthography,2)) / ((xCoords.y - xCoords.x) / 2);
+        }
+        else
+        {
+            orthographicMultiplier = Mathf.Lerp((yCoords.y - yCoords.x) / 2, orthographicSize, Mathf.Pow(orthography, 2)) / ((yCoords.y - yCoords.x) / 2);
+        }
 
-        return (ConstructMatrix(xCoords, yCoords, zCoords, orthography));
+        xCoords *= orthographicMultiplier;
+        yCoords *= orthographicMultiplier;
+
+        screen.SetPositions(new Vector3[] {
+            new Vector3(xCoords.x, yCoords.x, zCoords.x),
+            new Vector3(xCoords.y, yCoords.x, zCoords.x),
+            new Vector3(xCoords.y, yCoords.y, zCoords.x),
+            new Vector3(xCoords.x, yCoords.y, zCoords.x),
+        });
+        screen.loop = true;
+
+
+
+
+        Matrix4x4 output = (ConstructMatrix(xCoords, yCoords, zCoords, orthography));
+
+        Matrix4x4 invOutput = output.inverse;
+        Vector3 tl = invOutput.MultiplyPoint(new Vector3(-1, 1, 1));
+        Vector3 rt = invOutput.MultiplyPoint(new Vector3(1, 1, 1));
+        Vector3 bl = invOutput.MultiplyPoint(new Vector3(-1, -1, 1));
+        Vector3 br = invOutput.MultiplyPoint(new Vector3(1, -1, 1));
+
+        Vector3 scale = new Vector3(1, 1, -1);
+
+        tl.Scale(scale);
+        rt.Scale(scale);
+        bl.Scale(scale);
+        br.Scale(scale);
+
+        rear.SetPositions(new Vector3[]
+        {
+            tl,
+            new Vector3(xCoords.x, yCoords.y, zCoords.x),
+            tl,
+            rt,
+             new Vector3(xCoords.y, yCoords.y, zCoords.x),
+             rt,
+            br,
+             new Vector3(xCoords.y, yCoords.x, zCoords.x),
+             br,
+             bl,
+              new Vector3(xCoords.x, yCoords.x  , zCoords.x),
+
+            bl
+        });
+
+        rear.loop = true;
+
+        return output;
     }
 
     Matrix4x4 ConstructMatrix(Vector2 x, Vector2 y, Vector2 z, float o)
     {
         Matrix4x4 M = Matrix4x4.zero;
 
-        M[0, 0] = 2*((1 - o) * z.x + o) / (x.y - x.x); // perspective: 2n/(r-l), ortho: 2/(r-l)
+        M[0, 0] = 2 * ((1 - o) * z.x + o) / (x.y - x.x); // perspective: 2n/(r-l), ortho: 2/(r-l)
 
         float rl = (x.x + x.y) / (x.y - x.x); // (r+l)/(r-l)
         M[0, 2] = (1 - o) * rl; // perspective: (r+l)/(r-l), ortho: 0
@@ -102,16 +159,27 @@ public class ProjectionMatrix : MonoBehaviour
     void Update()
     {
         Matrix4x4 input = ProcessInput();
+
+        if (write)
+        {
+            Debug.Log(input.inverse);
+            Debug.Log(input);
+            Debug.Log(Camera.main.projectionMatrix);
+            write = false;
+        }
+
         appliedCamera.projectionMatrix = input;
         appliedCamera.nearClipPlane = zCoords.x;
-        appliedCamera.farClipPlane = zCoords.y;
+        appliedCamera.farClipPlane = zCoords.y+100;
+
+
 
         float aspectWidth = Mathf.Abs(xCoords.x - xCoords.y);
         float aspectHeight = Mathf.Abs(yCoords.y - yCoords.x);
 
         appliedCamera.aspect = aspectWidth / aspectHeight;
 
-        panel.transform.localScale = new Vector3(aspectWidth/aspectHeight, 1, 1);
+        panel.transform.localScale = new Vector3(aspectWidth / aspectHeight, 1, 1);
 
     }
 }

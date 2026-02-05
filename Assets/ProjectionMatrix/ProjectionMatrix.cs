@@ -34,7 +34,7 @@ public class ProjectionMatrix : MonoBehaviour
 
     private Vector2 xCoords;
     private Vector2 yCoords;
-    private Vector2 zCoords;
+    public Vector2 zCoords;
 
 
     public bool write = false;
@@ -59,6 +59,9 @@ public class ProjectionMatrix : MonoBehaviour
     public ProjectionRaycast raycast;
 
     private bool first = true;
+
+    public Vector2 rearXRange;
+    public Vector2 rearYRange;
 
     public void Start()
     {
@@ -270,18 +273,8 @@ public class ProjectionMatrix : MonoBehaviour
             Vector3 tl = rear.GetPosition(0);
             Vector3 br = rear.GetPosition(2);
 
-            Vector2 xRange = new Vector2(tl.x, br.x);
-            Vector2 yRange = new Vector2(br.y, tl.y);
-            Debug.Log(xRange);
-            raycast.CreateRays( xRange, yRange, zCoords);
-
-            foreach(RaycastHit hit in raycast.Hits)
-            {
-                Vector3 hitPoint = hit.point;
-                Vector3 screenPoint = WorldToScreen(hitPoint, input);
-
-                Debug.DrawLine(hitPoint, screenPoint, Color.white, 1);
-            }
+            rearXRange = new Vector2(tl.x, br.x);
+            rearYRange = new Vector2(br.y, tl.y);
 
             panel.transform.localScale = new Vector3(aspectWidth / aspectHeight, 1, 1);
         }
@@ -313,5 +306,12 @@ public class ProjectionMatrix : MonoBehaviour
         }
 
         return newMin + (value-min)*(newMax-newMin)/(max-min);
+    }
+
+    public RaycastHit NewRaycast(Vector3 startPoint, Vector3 endPoint)
+    {
+        Vector3 direction = (endPoint-startPoint).normalized;
+        RaycastHit hit = raycast.CastRay(startPoint, direction, zCoords.y);
+        return hit;
     }
 }

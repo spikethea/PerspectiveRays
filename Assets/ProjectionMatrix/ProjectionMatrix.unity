@@ -119,6 +119,54 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &152302928
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 152302929}
+  - component: {fileID: 152302930}
+  m_Layer: 2
+  m_Name: RaycastVisuals
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &152302929
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 152302928}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1364233239}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &152302930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 152302928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d0f31a9ac3f2744bad5fcf293c1e04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectionRaycastVisuals
+  raycastSource: {fileID: 1364233241}
+  lineMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  lineWidth: 0.05
+  projectionMatrix: {fileID: 1364233240}
 --- !u!1 &479445784
 GameObject:
   m_ObjectHideFlags: 0
@@ -1442,7 +1490,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 61
+    m_Bits: 187
   m_RenderingPath: 1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 1
@@ -1467,6 +1515,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 152302929}
   - {fileID: 1782214855}
   - {fileID: 483337862}
   - {fileID: 1048077622}
@@ -1499,6 +1548,7 @@ MonoBehaviour:
   aspectRatio: {x: 16, y: 9}
   orthography: 0
   orthographicSize: 1.5
+  zCoords: {x: 0, y: 0}
   write: 0
   screen: {fileID: 483337861}
   rear: {fileID: 1048077621}
@@ -1513,6 +1563,8 @@ MonoBehaviour:
   - {fileID: 1185488558}
   - {fileID: 1943939672}
   raycast: {fileID: 1364233241}
+  rearXRange: {x: 0, y: 0}
+  rearYRange: {x: 0, y: 0}
 --- !u!114 &1364233241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1528,8 +1580,8 @@ MonoBehaviour:
   hitLayers:
     serializedVersion: 2
     m_Bits: 128
-  horizontalRays: 50
-  verticalRays: 6
+  horizontalResolution: 2.08
+  verticalResolution: 3.3
   horizontalFOV: 20
   verticalFOV: 12
   cam: {fileID: 1364233238}
@@ -2196,7 +2248,7 @@ GameObject:
   - component: {fileID: 1909404416}
   - component: {fileID: 1909404415}
   - component: {fileID: 1909404419}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: CameraArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -8,8 +8,12 @@ public class ProjectionRaycast : MonoBehaviour
     public LayerMask hitLayers;
 
     [Header("Cone Resolution")]
-    [Range(1, 50)] public int horizontalRays = 10;
-    [Range(1, 50)] public int verticalRays = 6;
+
+    public float horizontalResolution = 2.08f;
+    public float verticalResolution = 3.3f;
+     
+    [Range(1, 50)] private int horizontalRays = 10;
+    [Range(1, 50)] private int verticalRays = 6;
 
     [Header("Cone Angles")]
     [Range(1f, 90f)] public float horizontalFOV = 20f;
@@ -25,7 +29,9 @@ public class ProjectionRaycast : MonoBehaviour
         Rays.Clear();
         Hits.Clear();
 
- 
+        horizontalRays = Mathf.CeilToInt(horizontalResolution * (xCoords.y-xCoords.x));
+        verticalRays = Mathf.CeilToInt(verticalResolution * (yCoords.y - yCoords.x));
+
 
         for (int y = 0; y < verticalRays; y++)
         {
@@ -41,7 +47,6 @@ public class ProjectionRaycast : MonoBehaviour
                 Vector3 direction = cam.transform.forward*-1;
 
                 Ray ray = new Ray(startPos, direction);
-                Rays.Add(ray);
 
                 if (Physics.Raycast(ray, out RaycastHit hit, zCoords.y, hitLayers))
                 {
@@ -58,5 +63,13 @@ public class ProjectionRaycast : MonoBehaviour
                 }
             }
         }
+    }
+
+    public RaycastHit CastRay(Vector3 startPoint, Vector3 direction, float distance)
+    {
+        Ray ray = new Ray(startPoint, direction);
+        RaycastHit hit;
+        Physics.Raycast(ray, out hit, distance, hitLayers);
+        return hit;
     }
 }

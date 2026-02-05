@@ -1,8 +1,11 @@
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Windows;
 
-[ExecuteAlways]
+
 public class ProjectionMatrix : MonoBehaviour
 {
     public Camera appliedCamera;
@@ -31,19 +34,40 @@ public class ProjectionMatrix : MonoBehaviour
 
     private Vector2 xCoords;
     private Vector2 yCoords;
-    private Vector2 zCoords;
+    public Vector2 zCoords;
 
 
     public bool write = false;
     public LineRenderer screen;
     public LineRenderer rear;
+    public LineRenderer right;
+    public LineRenderer left;
 
 
-
+    public Mesh areaMesh;
+    public MeshFilter meshFilter;
+    public CameraArea cameraArea;
     public GameObject panel;
     // Start is called once before the first execution of Update after the MonoBehaviour is create
 
-    Matrix4x4 ProcessInput()
+    private Vector3 topLeftCoords = new Vector3(-1,1,1);
+    private Vector3 topRightCoords = new Vector3(1,1,1);
+    private Vector3 bottomRightCoords = new Vector3(1, -1, 1);
+    private Vector3 bottomLeftCoords = new Vector3(-1,-1,1);
+
+    public List<GameObject> targetObjects;
+    public ProjectionRaycast raycast;
+
+    private bool first = true;
+
+    public Vector2 rearXRange;
+    public Vector2 rearYRange;
+
+    public void Start()
+    {
+    }
+
+    public Matrix4x4 ProcessInput()
     {
         xCoords = xCoordsInput;
         yCoords = yCoordsInput;
@@ -73,7 +97,7 @@ public class ProjectionMatrix : MonoBehaviour
 
         if (useHorizontal)
         {
-            orthographicMultiplier = Mathf.Lerp((xCoords.y - xCoords.x) / 2, orthographicSize, Mathf.Pow(orthography,2)) / ((xCoords.y - xCoords.x) / 2);
+            orthographicMultiplier = Mathf.Lerp((xCoords.y - xCoords.x) / 2, orthographicSize, Mathf.Pow(orthography, 2)) / ((xCoords.y - xCoords.x) / 2);
         }
         else
         {
@@ -83,53 +107,112 @@ public class ProjectionMatrix : MonoBehaviour
         xCoords *= orthographicMultiplier;
         yCoords *= orthographicMultiplier;
 
-        screen.SetPositions(new Vector3[] {
-            new Vector3(xCoords.x, yCoords.x, zCoords.x),
-            new Vector3(xCoords.y, yCoords.x, zCoords.x),
-            new Vector3(xCoords.y, yCoords.y, zCoords.x),
-            new Vector3(xCoords.x, yCoords.y, zCoords.x),
-        });
-        screen.loop = true;
-
 
 
 
         Matrix4x4 output = (ConstructMatrix(xCoords, yCoords, zCoords, orthography));
+        return output;
+    }
 
-        Matrix4x4 invOutput = output.inverse;
-        Vector3 tl = invOutput.MultiplyPoint(new Vector3(-1, 1, 1));
-        Vector3 rt = invOutput.MultiplyPoint(new Vector3(1, 1, 1));
-        Vector3 bl = invOutput.MultiplyPoint(new Vector3(-1, -1, 1));
-        Vector3 br = invOutput.MultiplyPoint(new Vector3(1, -1, 1));
 
-        Vector3 scale = new Vector3(1, 1, -1);
 
-        tl.Scale(scale);
-        rt.Scale(scale);
-        bl.Scale(scale);
-        br.Scale(scale);
+     public void createVolume(Matrix4x4 m)
+    {
+        Matrix4x4 invOutput = m.inverse;
+
+        //rear.loop = true;
+
+        rear.positionCount = 4;
+        screen.positionCount = 4;
+        right.positionCount = 4;
+        left.positionCount = 4;
+        rear.loop = true;
+        screen.loop = true;
+        right.loop = true;
+        left.loop = true;
+
+        Vector3 ntl = new Vector3(xCoords.x, yCoords.y, zCoords.x);
+        Vector3 ntr = new Vector3(xCoords.y, yCoords.y, zCoords.x);
+        Vector3 nbr = new Vector3(xCoords.y, yCoords.x, zCoords.x);
+        Vector3 nbl = new Vector3(xCoords.x, yCoords.x, zCoords.x);
+
+        Vector3 ftl = new();
+        Vector3 ftr = new();
+        Vector3 fbr = new();
+        Vector3 fbl = new();
+
+        Mesh newMesh = new Mesh();
+        Vector3[] newVertices = new Vector3[areaMesh.vertices.Length];
+        int idx = 0;
+        foreach (Vector3 v in areaMesh.vertices)
+        {
+            Vector3 transPoint = invOutput.MultiplyPoint(v * 2);
+            transPoint.Scale(new Vector3(1, 1, -1));
+            newVertices[idx] = (transPoint);
+
+            if (v * 2 == topLeftCoords)
+            {
+                ftl = transPoint;
+            }
+            else if (v * 2 == topRightCoords)
+            {
+                ftr = transPoint;
+            }
+            else if (v * 2 == bottomRightCoords)
+            {
+                fbr = transPoint;
+            }
+            else if (v * 2 == bottomLeftCoords)
+            {
+                fbl = transPoint;
+            }
+
+
+
+            idx++;
+        }
 
         rear.SetPositions(new Vector3[]
         {
-            tl,
-            new Vector3(xCoords.x, yCoords.y, zCoords.x),
-            tl,
-            rt,
-             new Vector3(xCoords.y, yCoords.y, zCoords.x),
-             rt,
-            br,
-             new Vector3(xCoords.y, yCoords.x, zCoords.x),
-             br,
-             bl,
-              new Vector3(xCoords.x, yCoords.x  , zCoords.x),
-
-            bl
+            ftl,
+            ftr,
+            fbr,
+            fbl,
         });
 
-        rear.loop = true;
+        screen.SetPositions(new Vector3[]
+        {
+            ntl,
+            ntr,
+            nbr,
+            nbl
+        });
 
-        return output;
-    }
+        right.SetPositions(new Vector3[]
+        {
+            ntr,
+            ftr,
+            fbr,
+            nbr
+        });
+
+        left.SetPositions(new Vector3[]
+        {
+            ntl,
+            ftl,
+            fbl,
+            nbl
+        });
+
+
+        newMesh.SetVertices(newVertices);
+        newMesh.SetTriangles(areaMesh.triangles, 0);
+        newMesh.RecalculateBounds();
+        newMesh.RecalculateNormals();
+
+        meshFilter.sharedMesh = newMesh;
+    }   
+        
 
     Matrix4x4 ConstructMatrix(Vector2 x, Vector2 y, Vector2 z, float o)
     {
@@ -162,24 +245,73 @@ public class ProjectionMatrix : MonoBehaviour
 
         if (write)
         {
+
+
             Debug.Log(input.inverse);
             Debug.Log(input);
             Debug.Log(Camera.main.projectionMatrix);
             write = false;
         }
 
-        appliedCamera.projectionMatrix = input;
-        appliedCamera.nearClipPlane = zCoords.x;
-        appliedCamera.farClipPlane = zCoords.y+100;
+        if (input != appliedCamera.projectionMatrix || first)
+        {
+            createVolume(input);
+            if (first)
+            {
+                first = false;
+            }
+            appliedCamera.projectionMatrix = input;
+            
+            appliedCamera.nearClipPlane = zCoords.x;
+            appliedCamera.farClipPlane = zCoords.y + 100;
+
+            float aspectWidth = Mathf.Abs(xCoords.x - xCoords.y);
+            float aspectHeight = Mathf.Abs(yCoords.y - yCoords.x);
+
+            appliedCamera.aspect = aspectWidth / aspectHeight;
+
+            Vector3 tl = rear.GetPosition(0);
+            Vector3 br = rear.GetPosition(2);
+
+            rearXRange = new Vector2(tl.x, br.x);
+            rearYRange = new Vector2(br.y, tl.y);
+
+            panel.transform.localScale = new Vector3(aspectWidth / aspectHeight, 1, 1);
+        }
+
+        
+
+    }
+
+    public Vector3 WorldToScreen(Vector3 worldPoint, Matrix4x4 m)
+    {
+        Vector3 eyePoint = transform.worldToLocalMatrix.MultiplyPoint3x4(worldPoint);
+        eyePoint.Scale(new Vector3(1, 1, -1));
+        Vector3 projectedPoint = m.MultiplyPoint(eyePoint);
+        projectedPoint.x = Remap(projectedPoint.x, -1, 1, xCoords.x, xCoords.y);
+        projectedPoint.y = Remap(projectedPoint.y, -1, 1, yCoords.x, yCoords.y);
+        projectedPoint.z = zCoords.x;
 
 
 
-        float aspectWidth = Mathf.Abs(xCoords.x - xCoords.y);
-        float aspectHeight = Mathf.Abs(yCoords.y - yCoords.x);
+        Vector3 screenPoint = transform.TransformPoint(projectedPoint);
+        return screenPoint;
+    }
 
-        appliedCamera.aspect = aspectWidth / aspectHeight;
+    public float Remap(float value, float min, float max, float newMin, float newMax)
+    {
+        if (Mathf.Approximately(max, min))
+        {
+            return value;
+        }
 
-        panel.transform.localScale = new Vector3(aspectWidth / aspectHeight, 1, 1);
+        return newMin + (value-min)*(newMax-newMin)/(max-min);
+    }
 
+    public RaycastHit NewRaycast(Vector3 startPoint, Vector3 endPoint)
+    {
+        Vector3 direction = (endPoint-startPoint).normalized;
+        RaycastHit hit = raycast.CastRay(startPoint, direction, zCoords.y);
+        return hit;
     }
 }

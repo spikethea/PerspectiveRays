@@ -17,9 +17,9 @@
 \usepackage{bigfoot}
 \DeclareNewFootnote{Affil}[arabic]
 
-\author{Quince Gore-Rodney\thanks{MA/MSc Virtual and Augmented Reality}}
-\author{Damian Lau\protect\footnotemark[1]}
-\author{Oliver J. Martin\thanks{MSc Computer Games}}
+\author{Quince Gore-Rodney\protect\footnoteAffil{\enspace MA/MSc Virtual and Augmented Reality}}
+\author{Damian Lau\protect\footnotemarkAffil[1]}
+\author{Oliver J. Martin\protect\footnoteAffil{\enspace MSc Computer Games}}
 \affil{Department of Computing\\Goldsmiths, University of London}
  \title{\Large IS71021E Assignment 2\\\huge An Interactive Exploration of Camera Projection }
 
@@ -58,15 +58,62 @@ The foundation of 3D computer graphics began with wireframe CAD simulations, Boe
 \end{equation}
 Where \((x_{c}, y_{c}, z_{c}, w_{c})\) is the representation of the point in the homogenous `clip' coordinate system. It is worth noting that the eye space point is implicitly converted into a homogenous point by assigning the \(w\) component to 1.  In clip coordinates, it is efficient to determine whether a point is within the viewing volume - as a point is visible if \(-w_{c} \le x_{c}, y_{c}, z_{c} \le w_{c}\). This point can then be transformed into normalised canonical view volume coordinates through a process known as perspective division:
 \begin{equation}
-\begin{bmatrix} x_{n} \\ y_{n} \\ z_{n} \end{bmatrix}=P
-\begin{bmatrix}\frac{x_{c}}{w_{c}} \\ \frac{ y_{c}}{w_{c}} \\ \frac{z_{c}}{w_{c}}\end{bmatrix}
+\begin{bmatrix} x_{n} \\ y_{n} \\ z_{n} \end{bmatrix}=
+\begin{bmatrix}\dfrac{x_{c}}{w_{c}} \\[2ex] \dfrac{ y_{c}}{w_{c}} \\[2ex] \dfrac{z_{c}}{w_{c}}\end{bmatrix}
 \end{equation}
 Where \((x_{n}, y_{n}, z_{n})\) is the point in the normalised canonical view volume. \(x_{n}\) and \(y_{n}\) are the normalised screen coordinates, and can be converted to pixel coordinates by remapping them from the range (-1, 1) to the pixel resolution of the target screen (with width \(W\) and height \(H\)):
 \begin{equation}
 \begin{aligned}
-x_{screen} = (x_{n}+1) \cdot \frac{W}{2}\\
-y_{screen} = (y_{n}+1) \cdot \frac{H}{2}
+x_{screen} = (x_{n}+1) \cdot \dfrac{W}{2}\\
+y_{screen} = (y_{n}+1) \cdot \dfrac{H}{2}
 \end{aligned}
 \end{equation}
+
+\subsubsection{Perspective Projection}
+Perspective projection aims to mimic human vision by making distant objects appear smaller and converge towards a vanishing point - much like we see in photography, where parallel lines converge towards the origin and disappear (Fig. 3).
+\begin{figure}[t]
+\captionsetup{justification=centering}
+\centering
+\includegraphics[width=.75\linewidth]{Figure3}
+\caption{Single Perspective Photography by Diane Wehr.}
+\end{figure}
+To achieve this, the camera view volume is defined as a truncated pyramid frustrum as shown in figure 4. The near and far clipping planes of the frustrum are defined as $-n$ and $-f$, respectively, and the projection plane (the near plane) of the frustrum is rectangular, with a width ranging from $l$ to $r$ in the $x$ direction and from $b$ to $t$ in the $y$ direction.
+\begin{figure}[t]
+\captionsetup{justification=centering}
+\centering
+\includegraphics[width=.5\linewidth]{Frustrum}
+\caption{The camera frustrum used for perspective projection in the OpenGL rendering pipeline.}
+\end{figure}
+The projection matrix for perspective projection can then be derived as:
+\begin{equation}
+P_{p}=
+\begin{bmatrix}
+\dfrac{2n}{r-l} & 0 & \dfrac{r+l}{r-l} & 0 \\[2ex]
+0 & \dfrac{2n}{t-b} & \dfrac{t+b}{t-b} & 0\\[2ex]
+0&0&\dfrac{-(f+n)}{f-n}&\dfrac{-2fn}{f-n}\\[2ex]
+0&0&-1&0
+\end{bmatrix}
+\end{equation}
+The use of homogenous coordinates is crucial for obtaining the perspective effect as after a point has been transformed into clip coordinates, the $w$ component is equivalent to the $z$ coordinate in eye coordinates. Therefore, when this point is transformed into canonical view volume coordinates (equation 2), the $x$ and $y$ values are divided by their distance from the camera in world space - leading to points further away converging towards (0, 0), the centre of the camera's view (Susta, 2024).
+\subsubsection{Orthographic Projection} 
+Orthographic projection is a form of projection which preserves parallel lines and relative distances by keeping all the projection lines orthogonal to the projection plane. This makes orthographic projection particularly useful for techincal applications, such as CAD software.\\
+In contrast to the frustrum used as the view volume for perspective projection, orthographic projection instead remaps a cuboidal bounding box to the canonical view volume (Figure 5)- which allows for a simpler linear transformation of contained points.\\
+\begin{figure}[t]
+\captionsetup{justification=centering}
+\centering
+\includegraphics[width=.5\linewidth]{Ortho}
+\caption{The cuboidal view volume used for orthographic projection in the OpenGL rendering pipeline.}
+\end{figure}
+The projection matrix for orthographic projection can then be defined as:
+\begin{equation}
+P_{o}=
+\begin{bmatrix}
+\dfrac{2}{r-l} & 0 & 0 & -\dfrac{r+l}{r-l} \\[2ex]
+0 & \dfrac{2}{t-b} &0& \dfrac{t+b}{t-b}\\[2ex]
+0&0&\dfrac{-2}{f-n}&\dfrac{-(f+n)}{f-n}\\[2ex]
+0&0&0&1
+\end{bmatrix}
+\end{equation}
+The fourth row of the projection matrix remaining as $(0, 0, 0, 1)$ ensures that the $w$ component has no effect on the projected positions, as it will remain as 1 after transformation.
 
 \end{document}

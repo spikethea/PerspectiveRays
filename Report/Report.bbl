@@ -1,0 +1,317 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global/global}
+    \entry{Benyon2013}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=40d18927e75d8837e4bb0e42c57314d4}{%
+           family={Benyon},
+           familyi={B\bibinitperiod},
+           given={David},
+           giveni={D\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {eng}%
+      }
+      \list{location}{1}{%
+        {Harlow, England}%
+      }
+      \list{publisher}{1}{%
+        {Pearson}%
+      }
+      \strng{namehash}{40d18927e75d8837e4bb0e42c57314d4}
+      \strng{fullhash}{40d18927e75d8837e4bb0e42c57314d4}
+      \strng{fullhashraw}{40d18927e75d8837e4bb0e42c57314d4}
+      \strng{bibnamehash}{40d18927e75d8837e4bb0e42c57314d4}
+      \strng{authorbibnamehash}{40d18927e75d8837e4bb0e42c57314d4}
+      \strng{authornamehash}{40d18927e75d8837e4bb0e42c57314d4}
+      \strng{authorfullhash}{40d18927e75d8837e4bb0e42c57314d4}
+      \strng{authorfullhashraw}{40d18927e75d8837e4bb0e42c57314d4}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Designing Interactive Systems is the most authoritative textbook in the areas of human-computer interaction (HCI), usability, consumer experience and interaction design. David Benyon has updated the book based on extensive user feedback to provide a challenging and exciting teaching resource for courses in this area. The book includes numerous case studies and illustrations taken from the author's extensive experience of designing innovative products and systems. Each chapter includes thought-provoking challenges and reflective interjections pointing readers to related areas of study.}
+      \field{booktitle}{Designing interactive systems : a comprehensive guide to HCI, UX and interaction design}
+      \field{edition}{Third edition.}
+      \field{isbn}{9781488682919}
+      \field{series}{Always learning}
+      \field{title}{Designing interactive systems : a comprehensive guide to HCI, UX and interaction design}
+      \field{year}{2013}
+      \keyw{Human-computer interaction}
+    \endentry
+    \entry{Lindberg1968}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=f3b35c77520808f3b7fdd7006fec1360}{%
+           family={Lindberg},
+           familyi={L\bibinitperiod},
+           given={David\bibnamedelima C.},
+           giveni={D\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{f3b35c77520808f3b7fdd7006fec1360}
+      \strng{fullhash}{f3b35c77520808f3b7fdd7006fec1360}
+      \strng{fullhashraw}{f3b35c77520808f3b7fdd7006fec1360}
+      \strng{bibnamehash}{f3b35c77520808f3b7fdd7006fec1360}
+      \strng{authorbibnamehash}{f3b35c77520808f3b7fdd7006fec1360}
+      \strng{authornamehash}{f3b35c77520808f3b7fdd7006fec1360}
+      \strng{authorfullhash}{f3b35c77520808f3b7fdd7006fec1360}
+      \strng{authorfullhashraw}{f3b35c77520808f3b7fdd7006fec1360}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{00039519, 14320657}
+      \field{journaltitle}{Archive for History of Exact Sciences}
+      \field{number}{2}
+      \field{title}{The Theory of Pinhole Images from Antiquity to the Thirteenth Century}
+      \field{urlday}{9}
+      \field{urlmonth}{2}
+      \field{urlyear}{2026}
+      \field{volume}{5}
+      \field{year}{1968}
+      \field{urldateera}{ce}
+      \field{pages}{154\bibrangedash 176}
+      \range{pages}{23}
+      \verb{urlraw}
+      \verb http://www.jstor.org/stable/41133285
+      \endverb
+      \verb{url}
+      \verb http://www.jstor.org/stable/41133285
+      \endverb
+    \endentry
+    \entry{CameraObscura}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=12ec7d9140a8c431d689842ae010ea19}{%
+           family={Camera\bibnamedelima Obscura},
+           familyi={C\bibinitperiod\bibinitdelim O\bibinitperiod},
+           given={Edinburgh},
+           giveni={E\bibinitperiod}}}%
+      }
+      \strng{namehash}{12ec7d9140a8c431d689842ae010ea19}
+      \strng{fullhash}{12ec7d9140a8c431d689842ae010ea19}
+      \strng{fullhashraw}{12ec7d9140a8c431d689842ae010ea19}
+      \strng{bibnamehash}{12ec7d9140a8c431d689842ae010ea19}
+      \strng{authorbibnamehash}{12ec7d9140a8c431d689842ae010ea19}
+      \strng{authornamehash}{12ec7d9140a8c431d689842ae010ea19}
+      \strng{authorfullhash}{12ec7d9140a8c431d689842ae010ea19}
+      \strng{authorfullhashraw}{12ec7d9140a8c431d689842ae010ea19}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Camera Obscura and World of Illusions Edinburgh}
+      \field{title}{What is a camera obscura?}
+      \verb{urlraw}
+      \verb https://www.camera-obscura.co.uk/article/what-is-a-camera-obscura/
+      \endverb
+      \verb{url}
+      \verb https://www.camera-obscura.co.uk/article/what-is-a-camera-obscura/
+      \endverb
+    \endentry
+    \entry{Delsaute1998}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=c2cbb606bf07575e671aadf9448c310f}{%
+           family={Delsaute},
+           familyi={D\bibinitperiod},
+           given={Jean-Luc},
+           giveni={J\bibinithyphendelim L\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {National Gallery of Art}%
+      }
+      \strng{namehash}{c2cbb606bf07575e671aadf9448c310f}
+      \strng{fullhash}{c2cbb606bf07575e671aadf9448c310f}
+      \strng{fullhashraw}{c2cbb606bf07575e671aadf9448c310f}
+      \strng{bibnamehash}{c2cbb606bf07575e671aadf9448c310f}
+      \strng{authorbibnamehash}{c2cbb606bf07575e671aadf9448c310f}
+      \strng{authornamehash}{c2cbb606bf07575e671aadf9448c310f}
+      \strng{authorfullhash}{c2cbb606bf07575e671aadf9448c310f}
+      \strng{authorfullhashraw}{c2cbb606bf07575e671aadf9448c310f}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{00917338}
+      \field{journaltitle}{Studies in the History of Art}
+      \field{title}{The Camera Obscura and Painting in the Sixteenth and Seventeenth Centuries}
+      \field{urlday}{9}
+      \field{urlmonth}{2}
+      \field{urlyear}{2026}
+      \field{volume}{55}
+      \field{year}{1998}
+      \field{urldateera}{ce}
+      \field{pages}{110\bibrangedash 123}
+      \range{pages}{14}
+      \verb{urlraw}
+      \verb http://www.jstor.org/stable/42622602
+      \endverb
+      \verb{url}
+      \verb http://www.jstor.org/stable/42622602
+      \endverb
+    \endentry
+    \entry{Manovich2014}{inproceedings}{}{}
+      \name{author}{1}{}{%
+        {{hash=6c331d4d18add8b45bac3f8e619face7}{%
+           family={Manovich},
+           familyi={M\bibinitperiod},
+           given={Lev},
+           giveni={L\bibinitperiod}}}%
+      }
+      \strng{namehash}{6c331d4d18add8b45bac3f8e619face7}
+      \strng{fullhash}{6c331d4d18add8b45bac3f8e619face7}
+      \strng{fullhashraw}{6c331d4d18add8b45bac3f8e619face7}
+      \strng{bibnamehash}{6c331d4d18add8b45bac3f8e619face7}
+      \strng{authorbibnamehash}{6c331d4d18add8b45bac3f8e619face7}
+      \strng{authornamehash}{6c331d4d18add8b45bac3f8e619face7}
+      \strng{authorfullhash}{6c331d4d18add8b45bac3f8e619face7}
+      \strng{authorfullhashraw}{6c331d4d18add8b45bac3f8e619face7}
+      \field{sortinit}{8}
+      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{The Mapping of Space: Perspective, Radar, and 3-D Computer Graphics}
+      \field{year}{2014}
+      \verb{urlraw}
+      \verb https://api.semanticscholar.org/CorpusID:208523953
+      \endverb
+      \verb{url}
+      \verb https://api.semanticscholar.org/CorpusID:208523953
+      \endverb
+    \endentry
+    \entry{Wehr2022}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=939e376fe13bbb08eb0c63f871b50947}{%
+           family={Wehr},
+           familyi={W\bibinitperiod},
+           given={Diane},
+           giveni={D\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Diane Wehr Street Photography}%
+      }
+      \strng{namehash}{939e376fe13bbb08eb0c63f871b50947}
+      \strng{fullhash}{939e376fe13bbb08eb0c63f871b50947}
+      \strng{fullhashraw}{939e376fe13bbb08eb0c63f871b50947}
+      \strng{bibnamehash}{939e376fe13bbb08eb0c63f871b50947}
+      \strng{authorbibnamehash}{939e376fe13bbb08eb0c63f871b50947}
+      \strng{authornamehash}{939e376fe13bbb08eb0c63f871b50947}
+      \strng{authorfullhash}{939e376fe13bbb08eb0c63f871b50947}
+      \strng{authorfullhashraw}{939e376fe13bbb08eb0c63f871b50947}
+      \field{sortinit}{9}
+      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Diane Wehr Street Photography}
+      \field{month}{9}
+      \field{title}{Five types of perspective in photography}
+      \field{year}{2022}
+      \verb{urlraw}
+      \verb https://www.dianewehr.com/blog/2022/9/29/gnpqp54rpd80njczh606dkurcdtdmw
+      \endverb
+      \verb{url}
+      \verb https://www.dianewehr.com/blog/2022/9/29/gnpqp54rpd80njczh606dkurcdtdmw
+      \endverb
+    \endentry
+    \entry{songho}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=14b3ac486e929b66bc7d415fb6c9db23}{%
+           family={Ahn},
+           familyi={A\bibinitperiod},
+           given={Song\bibnamedelima Ho},
+           giveni={S\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+      }
+      \strng{namehash}{14b3ac486e929b66bc7d415fb6c9db23}
+      \strng{fullhash}{14b3ac486e929b66bc7d415fb6c9db23}
+      \strng{fullhashraw}{14b3ac486e929b66bc7d415fb6c9db23}
+      \strng{bibnamehash}{14b3ac486e929b66bc7d415fb6c9db23}
+      \strng{authorbibnamehash}{14b3ac486e929b66bc7d415fb6c9db23}
+      \strng{authornamehash}{14b3ac486e929b66bc7d415fb6c9db23}
+      \strng{authorfullhash}{14b3ac486e929b66bc7d415fb6c9db23}
+      \strng{authorfullhashraw}{14b3ac486e929b66bc7d415fb6c9db23}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{songho.ca}
+      \field{title}{OpenGL projection matrix}
+      \verb{urlraw}
+      \verb https://www.songho.ca/opengl/gl_projectionmatrix.html
+      \endverb
+      \verb{url}
+      \verb https://www.songho.ca/opengl/gl_projectionmatrix.html
+      \endverb
+    \endentry
+    \entry{Corradi2025}{misc}{}{}
+      \name{author}{2}{}{%
+        {{hash=ffbd0e04bad156849046bd006a24e35c}{%
+           family={Corradi\bibnamedelima Dell’Acqua},
+           familyi={C\bibinitperiod\bibinitdelim D\bibinitperiod},
+           given={Edoarda},
+           giveni={E\bibinitperiod}}}%
+        {{hash=e9df30843be5c26a340abc62bc50e273}{%
+           family={Mohammadi},
+           familyi={M\bibinitperiod},
+           given={Jamshid},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Engineering LibreTexts}%
+      }
+      \strng{namehash}{8ffb6edbd769f1075e4738d90b3fcb46}
+      \strng{fullhash}{8ffb6edbd769f1075e4738d90b3fcb46}
+      \strng{fullhashraw}{8ffb6edbd769f1075e4738d90b3fcb46}
+      \strng{bibnamehash}{8ffb6edbd769f1075e4738d90b3fcb46}
+      \strng{authorbibnamehash}{8ffb6edbd769f1075e4738d90b3fcb46}
+      \strng{authornamehash}{8ffb6edbd769f1075e4738d90b3fcb46}
+      \strng{authorfullhash}{8ffb6edbd769f1075e4738d90b3fcb46}
+      \strng{authorfullhashraw}{8ffb6edbd769f1075e4738d90b3fcb46}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Engineering LibreTexts}
+      \field{month}{9}
+      \field{title}{Introduction to engineering drawing and design}
+      \field{year}{2025}
+      \verb{urlraw}
+      \verb https://eng.libretexts.org/Courses/Illinois_Institute_of_Technology/Introduction_to_Engineering_Drawing_and_Design
+      \endverb
+      \verb{url}
+      \verb https://eng.libretexts.org/Courses/Illinois_Institute_of_Technology/Introduction_to_Engineering_Drawing_and_Design
+      \endverb
+    \endentry
+    \entry{Free3D}{misc}{}{}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{journaltitle}{Free3D}
+      \verb{urlraw}
+      \verb https://free3d.com/3d-model/slr-camera-v1--279412.html
+      \endverb
+      \verb{url}
+      \verb https://free3d.com/3d-model/slr-camera-v1--279412.html
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

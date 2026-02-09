@@ -9,11 +9,11 @@ public class Raycast : MonoBehaviour
 
     [Header("Cone Resolution")]
     [Range(1, 50)] public int horizontalRays = 10;
-    [Range(1, 50)] public int verticalRays = 6;
+    [Range(1, 50)] public int verticalRays = 10;
 
     [Header("Cone Angles")]
-    [Range(1f, 90f)] public float horizontalFOV = 20f;
-    [Range(1f, 90f)] public float verticalFOV = 12f;
+    [Range(1f, 120f)] public float horizontalFOV = 10f;
+    [Range(1f, 120f)] public float verticalFOV = 30f;
 
     public List<Ray> Rays { get; private set; } = new();
     public List<RaycastHit> Hits { get; private set; } = new();
@@ -25,8 +25,8 @@ public class Raycast : MonoBehaviour
 
         Camera cam = Camera.main;
 
-        float hHalf = horizontalFOV * 0.5f;
-        float vHalf = verticalFOV * 0.5f;
+        float hHalf = horizontalFOV * 0.2f;
+        float vHalf = verticalFOV * 0.2f;
 
         for (int y = 0; y < verticalRays; y++)
         {
@@ -38,7 +38,7 @@ public class Raycast : MonoBehaviour
                 float hT = (horizontalRays == 1) ? 0.5f : (float)x / (horizontalRays - 1);
                 float hAngle = Mathf.Lerp(-hHalf, hHalf, hT);
 
-                // Build direction in camera local space
+                // defines local space for camera's raycast
                 Vector3 direction =
                     Quaternion.AngleAxis(hAngle, cam.transform.up) *
                     Quaternion.AngleAxis(vAngle, cam.transform.right) *
@@ -49,7 +49,7 @@ public class Raycast : MonoBehaviour
 
                 if (Physics.Raycast(ray, out RaycastHit hit, maxDistance, hitLayers))
                 {
-                    // Optional: ensure hit is actually inside camera frustum
+                    // Ensure hit detection is within camera's range.
                     Vector3 vp = cam.WorldToViewportPoint(hit.point);
 
                     bool inView =

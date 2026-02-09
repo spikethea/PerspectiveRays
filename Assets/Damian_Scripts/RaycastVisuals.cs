@@ -4,6 +4,13 @@ using System.Collections.Generic;
 [RequireComponent(typeof(LineRenderer))]
 public class RaycastVisuals : MonoBehaviour
 {
+    [Header("Visuals")]
+    public bool LineRendering = true;
+    public void ToggleLines()
+    {
+        LineRendering = !LineRendering;
+    }
+
     public Raycast raycastSource;
     public Material lineMaterial;
     public float lineWidth = 0.01f;
@@ -13,6 +20,11 @@ public class RaycastVisuals : MonoBehaviour
     void Update()
     {
         if (raycastSource == null) return;
+        if (!LineRendering)
+        {
+            DisableAllLines();
+            return;
+        }
 
         EnsureLineCount(raycastSource.Hits.Count);
 
@@ -24,7 +36,11 @@ public class RaycastVisuals : MonoBehaviour
                 Ray ray = raycastSource.Rays[i];
 
                 lines[i].enabled = true;
-                lines[i].SetPosition(0, ray.origin);
+                // Creates offset to display line renderers.
+                float startOffset = 0.1f; 
+                Vector3 start = ray.origin + ray.direction * startOffset;
+
+                lines[i].SetPosition(0, start);
                 lines[i].SetPosition(1, hit.point);
             }
             else
@@ -32,6 +48,12 @@ public class RaycastVisuals : MonoBehaviour
                 lines[i].enabled = false;
             }
         }
+    }
+
+    void DisableAllLines()
+    {
+        foreach (var line in lines)
+            line.enabled = false;
     }
 
     void EnsureLineCount(int count)
@@ -47,8 +69,11 @@ public class RaycastVisuals : MonoBehaviour
             lr.startWidth = lineWidth;
             lr.endWidth = lineWidth;
             lr.useWorldSpace = true;
+            lr.alignment = LineAlignment.View;
+            lr.textureMode = LineTextureMode.Stretch;
 
             lines.Add(lr);
         }
     }
+
 }

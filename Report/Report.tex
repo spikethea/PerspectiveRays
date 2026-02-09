@@ -17,7 +17,7 @@
 \usepackage{bigfoot}
 \DeclareNewFootnote{Affil}[arabic]
 
-\author{Quince Gore-Rodney\protect\footnoteAffil{\enspace MA/MSc Virtual and Augmented Reality}}
+\author{Quince Gore-Rodney\protect\footnoteAffil{\enspace MSc Virtual and Augmented Reality}}
 \author{Damian Lau\protect\footnotemarkAffil[1]}
 \author{Oliver J. Martin\protect\footnoteAffil{\enspace MSc Computer Games}}
 \affil{Department of Computing\\Goldsmiths, University of London}
@@ -37,11 +37,11 @@ The earliest perspective projection cameras in history are known as pinhole came
 \begin{figure}[t]
 \captionsetup{justification=centering}
 \centering
-\includegraphics[width=.75\linewidth]{Figure1}
+\includegraphics[width=.5\linewidth]{Figure1}
 
 \caption{Visualisation of Ibn al-Haytham’s camera obscura, comprising of a small hole in a dark room with a screen. (Camera Obscura \& World of Illusions Edinburgh, 2026)}
 \end{figure}
-During the European renaissance, pinhole images were used to sketch views of natural landscapes and cities. It is suggestible that the accuracy of the pinhole image allowed for accurate drawing of nature, not directly, but by observations. Artists like Samuel van Hoogstraeten to Leonardo DaVinci used the pinhole camera to understand perspective projection (Delsaute, p.113, 1998).   
+During the European renaissance, pinhole images were used to sketch views of natural landscapes and cities. It is suggestible that the accuracy of the pinhole image allowed for accurate drawing of nature, not directly, but by observations. Artists like Samuel van Hoogstraten to Leonardo DaVinci used the pinhole camera to understand perspective projection (Delsaute, p.113, 1998).   
 \begin{figure}[t]
 \captionsetup{justification=centering}
 \centering
@@ -96,7 +96,7 @@ P_{p}=
 \end{equation}
 The use of homogenous coordinates is crucial for obtaining the perspective effect as after a point has been transformed into clip coordinates, the $w$ component is equivalent to the $z$ coordinate in eye coordinates. Therefore, when this point is transformed into canonical view volume coordinates (equation 2), the $x$ and $y$ values are divided by their distance from the camera in world space - leading to points further away converging towards (0, 0), the centre of the camera's view (Susta, 2024).
 \subsubsection{Orthographic Projection} 
-Orthographic projection is a form of projection which preserves parallel lines and relative distances by keeping all the projection lines orthogonal to the projection plane. This makes orthographic projection particularly useful for techincal applications, such as CAD software.\\
+Orthographic projection is a form of projection which preserves parallel lines and relative distances by keeping all the projection lines orthogonal to the projection plane. This makes orthographic projection particularly useful for technical applications, such as CAD software.\\
 In contrast to the frustrum used as the view volume for perspective projection, orthographic projection instead remaps a cuboidal bounding box to the canonical view volume (Figure 5)- which allows for a simpler linear transformation of contained points.\\
 \begin{figure}[t]
 \captionsetup{justification=centering}
@@ -104,16 +104,54 @@ In contrast to the frustrum used as the view volume for perspective projection, 
 \includegraphics[width=.5\linewidth]{Ortho}
 \caption{The cuboidal view volume used for orthographic projection in the OpenGL rendering pipeline.}
 \end{figure}
-The projection matrix for orthographic projection can then be defined as:
+The projection matrix for orthographic projection is then defined as:
 \begin{equation}
 P_{o}=
 \begin{bmatrix}
 \dfrac{2}{r-l} & 0 & 0 & -\dfrac{r+l}{r-l} \\[2ex]
-0 & \dfrac{2}{t-b} &0& \dfrac{t+b}{t-b}\\[2ex]
+0 & \dfrac{2}{t-b} &0& -\dfrac{t+b}{t-b}\\[2ex]
 0&0&\dfrac{-2}{f-n}&\dfrac{-(f+n)}{f-n}\\[2ex]
 0&0&0&1
 \end{bmatrix}
 \end{equation}
 The fourth row of the projection matrix remaining as $(0, 0, 0, 1)$ ensures that the $w$ component has no effect on the projected positions, as it will remain as 1 after transformation.
+
+\section{Methodology}
+Consisting of a 3D Unity project scene with a multi-camera setup, where the primary camera is displaying the rendering of a simple mesh \texttt{GameObject}, the second camera observes the primary cameras inner workings. A sample of the camera's rays are visualised using the \texttt{LineRenderer} and custom geometry to display where on the objects surface the ray hits, is where the pixel will be displayed. The pixel-to-ray ratio is not an exact translation of the camera's resolution but made for demonstration purposes. \\
+To show how the different projections differ, the primary camera can smoothly interpolate from a perspective to an orthographic view. This was achieved by overriding the camera’s default settings by assigning a custom matrix to the \texttt{projectionMatrix} property in Unity's \texttt{Camera} class. The new matrix is constructed by linearly interpolating each value within the matrix between the perspective projection matrix (equation 4) and the orthographic projection matrix (equation 5). A new variable, $O$,  is introduced indicating the `orthography' of the camera (i.e. the point at which the interpolation is performed) with a range of 0 to 1 - with $O=0$ producing the perspective projection matrix and $O=1$ producing the orthographic matrix. The projection matrix for a given value of $O$ is therefore:
+\begin{equation*}
+\begin{aligned}
+P(O)=
+\begingroup % keep the change local
+\setlength\arraycolsep{0.5pt}
+\begin{bmatrix}
+\dfrac{2((1-O)n+O)}{r-l} & 0 & (1-O)\dfrac{r+l}{r-l} & -O\dfrac{r+l}{r-l} \\[2ex]
+0 & \dfrac{2((1-O)n+O)}{t-b} &(1-O)\dfrac{t+b}{t-b}& -O\dfrac{t+b}{t-b}\\[2ex]
+0&0&\dfrac{(O-1)(f+n)-2O}{f-n}&\dfrac{2(O-1)fn - O(f+n)}{f-n}\\[2ex]
+0&0&-O&O
+\end{bmatrix}
+\endgroup
+\end{aligned}
+\end{equation*}
+As the orthographic projection requires a larger screen plane than the perspective projection to have similarly sized view volumes, the size of the near plane is also increased with respect to $O$ - specifically $O^{5}$ to create an `ease-in' style effect. The world-space coordinates of the vertices of the far plane are calculated by multiplying the inverse of $P(O)$ with the coordinates of the far corners of the canonical view volume ($(-1,1,1), (1,1,1), (1,-1,1)$ and $(-1,-1,1)$) which are then used in conjunction with a \texttt{MeshRenderer} to visualise the view volume. 
+\\
+The visualisation of the camera's rays were implemented using an array of custom raycasts. These are emitted from the far plane of the view volume, in the $+z$ direction of the camera in eye-space (i.e. back towards the camera) - ensuring that all objects will be detected, regardless of the current projection. If a raycast intersects with a target mesh, a second raycast is emitted from the camera to the point of intersection to obtain the visible point (as otherwise all the detected points would be on the rear of the target mesh). This point is then converted into screen coordinates by mutliplying it by $P(O)$, and a \texttt{lineRenderer} constructs a line between the point of collision and the projected point on the screen. This visually demonstrates the key difference between perspective and orthographic projection, as it shows the projection rays converging towards the centre of the camera at $O=0$ and becoming parallel as $O$ approaches 1.
+\\
+Within the application, the user can interact with the UI to change key parameters of the camera. This is intended to give the user an understanding of the relationship between the two models of camera projection. The aim of this demonstration is to explain how the two models of camera projection are 2D projections of 3D space, but with different ways of handling depth.  The following variables in the applications are customisable: 
+\begin{itemize}
+  \item Multiple Camera Perspectives.
+  \item The `orthography' of the camera.
+  \item Projection Raycast orientation.
+  \item Visiblity of Raycast Lines.
+\end{itemize}
+This ensures that the users with different viewpoints can understand what the relationship is between the two mapping techniques. 
+\section{Conclusion}
+The skewing/diverging effect of perspective projection and how the matrix multiplication relates to the conversion of the 3D space onto a 2D plane can be aided by computer simulations. Techniques of comparing it with different types of parallel projections proved to be the most visually clear example to explain how the matrix is calculated. Secondly, the visualised camera rays proved useful to understand how the pixels relate to individual rays, but there is greater potential for them to explain how they factor into the depth calculations. \\
+To further emphasise the importance of the depth factor in creating the perspective projection, it would be informative to provide an indication of how much distance each ray travelled. The most informative way of display this information would be a billboard annotation above each arrow, from the distance of the primary camera to the surface it hits.\\
+Alternatively, a more visually intuitive way could be a colour indication, using a curve of different RGB values per Line Renderer to show the distance it had travelled in comparison. Perhaps, it would be useful to A/B test the two outcomes with student participants to deduce which is more effective than the other (UX Book).\\
+Finally, the current implementation of the application is such that it could easily be expanded to allow exploration of other aspects of camera projection. The visualisation aspects are generic with respect to the specific projection matrix used, which allows for future expansion into other types of projection - such as oblique projection. The dimensions of the view volume are also fully customisable, and no assumptions are made about the volume being symmetrical - opening up the possibility of exploration into asymmetrical projections such as those used for mixed-reality displays.
+\section{Contributions}
+This project was split by task, with Oliver handling projection matrix mathematics and implementation, Damian constructing the UI, and Quince writing the technical report. The Structural Planning and ideation stages involved all group members.
+
 
 \end{document}

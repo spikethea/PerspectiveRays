@@ -1,5 +1,6 @@
 Project: An Interactive Exploration of Camera Projection
-Group Members:
+<br/>
+<br/>Group Members:
 - Quince Gore-Rodney
 - Damian Lau
 - Oliver Martin

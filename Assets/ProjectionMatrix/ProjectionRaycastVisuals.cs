@@ -3,6 +3,14 @@ using System.Collections.Generic;
 
 public class ProjectionRaycastVisuals : MonoBehaviour
 {
+
+    [Header("Visuals")]
+    public bool LineRendering = true;
+    public void ToggleLines()
+    {
+        LineRendering = !LineRendering;
+    }
+
     public ProjectionRaycast raycastSource;
     public Material lineMaterial;
     public float lineWidth = 0.01f;
@@ -14,6 +22,11 @@ public class ProjectionRaycastVisuals : MonoBehaviour
     void Update()
     {
         if (raycastSource == null) return;
+        if (!LineRendering)
+        {
+            DisableAllLines();
+            return;
+        }
 
         raycastSource.CreateRays(projectionMatrix.rearXRange, projectionMatrix.rearYRange, projectionMatrix.zCoords);
         EnsureLineCount(raycastSource.Hits.Count);
@@ -40,6 +53,12 @@ public class ProjectionRaycastVisuals : MonoBehaviour
                 lines[i].enabled = false;
             }
         }
+    }
+
+    void DisableAllLines()
+    {
+        foreach (var line in lines)
+            line.enabled = false;
     }
 
     void EnsureLineCount(int count)

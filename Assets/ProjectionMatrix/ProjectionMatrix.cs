@@ -8,6 +8,7 @@ using UnityEngine.Windows;
 
 public class ProjectionMatrix : MonoBehaviour
 {
+
     public Camera appliedCamera;
     [Header("Screen Coordinates")]
     public Vector2 xCoordsInput = new Vector2(-1, 1); //(l,r)
@@ -31,6 +32,12 @@ public class ProjectionMatrix : MonoBehaviour
     public float orthography = 0;
     [Range(1, 100)]
     public float orthographicSize = 5;
+
+    public void SetOrthography(float value)
+    {
+        orthography = value;
+        Debug.Log("Orthography = " + orthography);
+    }
 
     private Vector2 xCoords;
     private Vector2 yCoords;
@@ -62,10 +69,6 @@ public class ProjectionMatrix : MonoBehaviour
 
     public Vector2 rearXRange;
     public Vector2 rearYRange;
-
-    public void Start()
-    {
-    }
 
     public Matrix4x4 ProcessInput()
     {
@@ -241,6 +244,7 @@ public class ProjectionMatrix : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         Matrix4x4 input = ProcessInput();
 
         if (write)

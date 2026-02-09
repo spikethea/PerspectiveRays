@@ -16,7 +16,7 @@ public class CameraManager : MonoBehaviour
 
         for (int i = 0; i < cameras.Length; i++)
         {
-            cameras[i].gameObject.SetActive(i == index);
+            cameras[i].enabled = (i == index);
         }
 
         currentIndex = index;
